@@ -63,5 +63,8 @@
             "name": "Yevhen Malykhin",
             "email": "echo2devnull@gmail.com"
         }
-    ]
+    ],
+    "require-dev": {
+        "symfony/web-server-bundle": "4.2.*"
+    }
 }
