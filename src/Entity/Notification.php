@@ -24,6 +24,9 @@ use Doctrine\ORM\Mapping\Entity;
  */
 class Notification
 {
+    const DEVICE_FRONT_LEFT = 'Front left';
+    const DEVICE_FRONT_RIGHT = 'Front right';
+
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -85,5 +88,10 @@ class Notification
         $this->dateEnd = $dateEnd;
 
         return $this;
+    }
+
+    public static function getDevices()
+    {
+        return [self::DEVICE_FRONT_LEFT, self::DEVICE_FRONT_RIGHT];
     }
 }

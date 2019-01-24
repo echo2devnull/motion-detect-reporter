@@ -1,16 +1,35 @@
-{{ form_start(form) }}
-{{ form_widget(form) }}
-{{ form_end(form) }}
+{% extends 'base.html.twig' %}
 
-<ul>
+{% block body %}
 
+    {{ form(form) }}
 
-{% for notification in notifications %}
-    <li>{{ notification.device }}</li>
-    <li>{{ notification.date_start }}</li>
-    <li>{{ notification.date_end }}</li>
-{% else %}
-    <li>No notifications found</li>
-{% endfor %}
+    {% if (pagination.getTotalItemCount) %}
+        <div class="count">
+            Total: {{ pagination.getTotalItemCount }}
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Device</th>
+                <th scope="col">Date Start</th>
+                <th scope="col">Date End</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for notification in pagination %}
+                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                    <td>{{ notification.device }}</td>
+                    <td>{{ notification.dateStart | date('Y-m-d H:i:s') }}</td>
+                    <td>{{ notification.dateEnd | date('Y-m-d H:i:s') }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
 
-</ul>
+        <div class="navigation">
+            {{ knp_pagination_render(pagination) }}
+        </div>
+    {% endif %}
+
+{% endblock %}
