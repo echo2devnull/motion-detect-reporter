@@ -1,0 +1,16 @@
+{{ form_start(form) }}
+{{ form_widget(form) }}
+{{ form_end(form) }}
+
+<ul>
+
+
+{% for notification in notifications %}
+    <li>{{ notification.device }}</li>
+    <li>{{ notification.date_start }}</li>
+    <li>{{ notification.date_end }}</li>
+{% else %}
+    <li>No notifications found</li>
+{% endfor %}
+
+</ul>
