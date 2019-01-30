@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Entity\Notification;
 use App\Exception\ValidationException;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class NotificationService
 {
+    const VALIDATION_GROUP_CREATE = 'create';
     const VALIDATION_GROUP_UPDATE = 'update';
 
     /**
@@ -41,7 +43,7 @@ class NotificationService
      */
     public function create(Notification $notification)
     {
-        $errors = $this->validator->validate($notification);
+        $errors = $this->validate($notification, [self::VALIDATION_GROUP_CREATE]);
         if ($errors->count()) {
             throw new ValidationException((string) $errors);
         }
@@ -85,10 +87,10 @@ class NotificationService
             $builder->andWhere('t.device=:device')->setParameter('device', $device);
         }
         if ($dateStart) {
-            $builder->andWhere('t.dateStart>=:dateStart')->setParameter('dateStart', $dateStart->getTimestamp());
+            $builder->andWhere('t.dateStart>=:dateStart')->setParameter('dateStart', $dateStart->format('Y-m-d H:i:s'));
         }
         if ($dateEnd) {
-            $builder->andWhere('t.dateEnd<=:dateEnd')->setParameter('dateEnd', $dateEnd->getTimestamp());
+            $builder->andWhere('t.dateEnd<=:dateEnd')->setParameter('dateEnd', $dateEnd->format('Y-m-d H:i:s'));
         }
 
         return $builder->getQuery();
@@ -97,6 +99,7 @@ class NotificationService
     /**
      * @param string $device
      * @return Notification|null
+     * @throws NonUniqueResultException
      */
     public function getLastUnfinished(string $device): ?Notification
     {

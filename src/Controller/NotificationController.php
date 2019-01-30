@@ -19,11 +19,16 @@ class NotificationController extends AbstractController
      * @Route("/")
      * @param Request $request
      * @param NotificationService $service
+     * @param Paginator $paginator
      * @return Response
+     * @throws \Exception
      */
     public function actionIndex(Request $request, NotificationService $service, Paginator $paginator)
     {
-        $notification = new Notification();
+        $notification = (new Notification())
+            ->setDateStart((new \DateTime())->setTime(0, 0, 0))
+            ->setDateEnd((new \DateTime())->setTime(23, 59, 59))
+        ;
 
         $form = $this->createFormBuilder($notification)
             ->add('device', ChoiceType::class, [

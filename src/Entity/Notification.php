@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\ORM\Mapping\Entity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\NotificationRepository")
@@ -24,8 +25,8 @@ use Doctrine\ORM\Mapping\Entity;
  */
 class Notification
 {
-    const DEVICE_FRONT_LEFT = 'Front left';
-    const DEVICE_FRONT_RIGHT = 'Front right';
+    const DEVICE_FRONT_LEFT = 'front-left';
+    const DEVICE_FRONT_RIGHT = 'front-right';
 
     /**
      * @ORM\Id()
@@ -36,16 +37,21 @@ class Notification
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank(groups={"create", "update"})
+     * @Assert\Length(max=255)
+     * @Assert\Choice(callback="getDevices")
      */
     private $device;
 
     /**
      * @ORM\Column(type="datetime")
+     * @Assert\NotBlank(groups={"create", "update"})
      */
     private $dateStart;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Assert\NotBlank(groups={"update"})
      */
     private $dateEnd;
 
