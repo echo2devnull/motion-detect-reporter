@@ -55,6 +55,11 @@ class Notification
      */
     private $dateEnd;
 
+    /**
+     * @var \SplFileInfo[]|array
+     */
+    private $files = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -96,8 +101,34 @@ class Notification
         return $this;
     }
 
-    public static function getDevices()
+    public static function getDevices(): array
     {
         return [self::DEVICE_FRONT_LEFT, self::DEVICE_FRONT_RIGHT];
     }
+
+    public function isFinished(): bool
+    {
+        return (bool) $this->dateEnd;
+    }
+
+    /**
+     * @return array|\SplFileInfo[]
+     */
+    public function getFiles(): array
+    {
+        return $this->files;
+    }
+
+    /**
+     * @param array|\SplFileInfo[] $files
+     * @return Notification
+     */
+    public function setFiles(array $files): self
+    {
+        $this->files = $files;
+
+        return $this;
+    }
+
+
 }

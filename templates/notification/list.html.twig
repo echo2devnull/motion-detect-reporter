@@ -9,19 +9,42 @@
             Total: {{ pagination.getTotalItemCount }}
         </div>
         <table class="table table-striped">
+            <caption>List of 'Motion Detected' notifications</caption>
             <thead>
             <tr>
                 <th scope="col">Device</th>
                 <th scope="col">Date Start</th>
                 <th scope="col">Date End</th>
+                <th scope="col" width="25%">Video</th>
             </tr>
             </thead>
             <tbody>
             {% for notification in pagination %}
-                <tr {% if loop.index is odd %}class="color"{% endif %}>
+                <tr>
                     <td>{{ notification.device }}</td>
                     <td>{{ notification.dateStart | date('Y-m-d H:i:s') }}</td>
                     <td>{{ notification.dateEnd | date('Y-m-d H:i:s') }}</td>
+                    <td>
+                        <div id="accordion">
+                        {% for video in notification.getFiles() %}
+                            <div class="card">
+                                <div class="card-header" id="heading-{{ loop.parent.loop.index }}">
+                                    <h5 class="mb-0">
+                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ loop.parent.loop.index }}" aria-expanded="true" aria-controls="collapse-{{ loop.parent.loop.index }}">
+                                            Show
+                                        </button>
+                                    </h5>
+                                </div>
+
+                                <div id="collapse-{{ loop.parent.loop.index }}" class="collapse" aria-labelledby="heading-{{ loop.parent.loop.index }}" data-parent="#accordion">
+                                    <div class="card-body">
+                                        <video controls="true" width='100%%' src='{{ path('video_show', {'device': notification.device, 'date': video.path|basename, 'file': video.baseName}) }}' type='video/mp4'></video>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        </div>
+                    </td>
                 </tr>
             {% endfor %}
             </tbody>
