@@ -29,6 +29,7 @@ class NotificationService
     /**
      * NotificationService constructor.
      * @param EntityManagerInterface $entityManager
+     * @param ValidatorInterface $validator
      */
     public function __construct(EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
