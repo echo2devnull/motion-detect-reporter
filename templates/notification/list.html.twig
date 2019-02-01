@@ -1,6 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    {% set animals = ['🦓', '🦒', '🦔', '🦕', '🦖', '🦗', '🦝', '🦙', '😸', '🐌', '🦘', '🐔', '🐝', '🐟', '🐻', '🐼', '🐽', '🦊', '🦏', '🦀', '🐹', '🦁', '🦂', '🙊'] %}
 
     {{ form(form) }}
 
@@ -8,10 +9,11 @@
         <div class="count">
             Total: {{ pagination.getTotalItemCount }}
         </div>
-        <table class="table table-striped">
+        <table class="table table-hover">
             <caption>List of 'Motion Detected' notifications</caption>
             <thead>
             <tr>
+                <th scope="col">#</th>
                 <th scope="col">Device</th>
                 <th scope="col">Date Start</th>
                 <th scope="col">Date End</th>
@@ -21,28 +23,36 @@
             <tbody>
             {% for notification in pagination %}
                 <tr>
+                    <td>{{ notification.id }}</td>
                     <td>{{ notification.device }}</td>
                     <td>{{ notification.dateStart | date('Y-m-d H:i:s') }}</td>
                     <td>{{ notification.dateEnd | date('Y-m-d H:i:s') }}</td>
                     <td>
                         <div id="accordion">
-                        {% for video in notification.getFiles() %}
-                            <div class="card">
-                                <div class="card-header" id="heading-{{ loop.parent.loop.index }}">
-                                    <h5 class="mb-0">
-                                        <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ loop.parent.loop.index }}" aria-expanded="true" aria-controls="collapse-{{ loop.parent.loop.index }}">
-                                            Show
-                                        </button>
-                                    </h5>
-                                </div>
 
+                                <div class="card">
+                                    <div class="card-header" id="heading-{{ loop.index }}">
+                                        <h5 class="mb-0">
+                                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapse-{{ loop.index }}" aria-expanded="true" aria-controls="collapse-{{ loop.index }}">
+                                                {% if (notification.getFiles()|length) %}
+                                                    Expand / Collapse
+                                                {% else %}
+                                                    No video files found {{ random(animals) }}
+                                                {% endif %}
+                                            </button>
+                                        </h5>
+                                    </div>
+
+                            {% for video in notification.getFiles() %}
                                 <div id="collapse-{{ loop.parent.loop.index }}" class="collapse" aria-labelledby="heading-{{ loop.parent.loop.index }}" data-parent="#accordion">
                                     <div class="card-body">
                                         <video controls="true" width='100%%' src='{{ path('video_show', {'device': notification.device, 'date': video.path|basename, 'file': video.baseName}) }}' type='video/mp4'></video>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+                            {% if (notification.getFiles()|length) %}
+                                </div>
+                            {% endif %}
                         </div>
                     </td>
                 </tr>
