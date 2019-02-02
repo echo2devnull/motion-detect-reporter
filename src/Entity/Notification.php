@@ -46,12 +46,14 @@ class Notification
     /**
      * @ORM\Column(type="datetime")
      * @Assert\NotBlank(groups={"create", "update"})
+     * @var \DateTime
      */
     private $dateStart;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Assert\NotBlank(groups={"update"})
+     * @var \DateTime
      */
     private $dateEnd;
 
@@ -130,5 +132,16 @@ class Notification
         return $this;
     }
 
+    /**
+     * @return int Duration in minutes
+     */
+    public function getDuration()
+    {
+        if (!$this->dateStart || !$this->dateEnd) {
 
+            return null;
+        }
+
+        return ceil(($this->dateEnd->getTimestamp() - $this->dateStart->getTimestamp()) / 60);
+    }
 }

@@ -17,6 +17,7 @@
                 <th scope="col">Device</th>
                 <th scope="col">Date Start</th>
                 <th scope="col">Date End</th>
+                <th scope="col">Duration</th>
                 <th scope="col" style="width:25%">Video</th>
             </tr>
             </thead>
@@ -27,6 +28,7 @@
                     <td>{{ notification.device }}</td>
                     <td>{{ notification.dateStart | date('Y-m-d H:i:s') }}</td>
                     <td>{{ notification.dateEnd | date('Y-m-d H:i:s') }}</td>
+                    <td>{{ notification.getDuration() }} min</td>
                     <td>
                         <div id="accordion">
 
