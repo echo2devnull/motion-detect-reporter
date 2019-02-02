@@ -17,7 +17,7 @@
                 <th scope="col">Device</th>
                 <th scope="col">Date Start</th>
                 <th scope="col">Date End</th>
-                <th scope="col" width="25%">Video</th>
+                <th scope="col" style="width:25%">Video</th>
             </tr>
             </thead>
             <tbody>
@@ -37,7 +37,7 @@
                                                 {% if (notification.getFiles()|length) %}
                                                     Expand / Collapse
                                                 {% else %}
-                                                    No video files found {{ random(animals) }}
+                                                    No video found <span class="h2">{{ random(animals) }}</span>
                                                 {% endif %}
                                             </button>
                                         </h5>
