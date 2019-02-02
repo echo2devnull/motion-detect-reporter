@@ -31,6 +31,7 @@ class NotificationController extends AbstractController
         ;
 
         $form = $this->createFormBuilder($notification)
+            ->setMethod(Request::METHOD_GET)
             ->add('device', ChoiceType::class, [
                 'choices'  => array_combine(Notification::getDevices(), Notification::getDevices()),
                 'required' => false,
